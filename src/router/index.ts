@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/PassProps.vue'
+import HomeView from '../views/HomeView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -12,32 +12,37 @@ const router = createRouter({
     {
       path: '/about',
       name: 'about',
-      component: () => import('../views/ref&reactive.vue')
+      component: () => import('../views/AboutView.vue')
     },
     {
       path: '/useForm',
       name: 'useForm',
-      component: () => import('../views/UseForm.vue')
+      component: () => import('../views/APITest/pages/UseForm.vue')
     },
     {
       path: '/grid',
       name: 'grid',
-      component: () => import('../views/Grid.vue')
+      component: () => import('../views/APITest/pages/Grid.vue')
     },
     {
       path: '/factory',
       name: 'factory',
-      component: () => import('../views/factory.vue')
+      component: () => import('../views/JSDemo/factory.vue')
     },
     {
       path: '/antd',
       name: 'antd',
-      component: () => import('../views/antd.vue')
+      component: () => import('../views/APITest/pages/antd.vue')
     },
     {
       path: '/card',
       name: 'card',
-      component: () => import('../views/card.vue')
+      component: () => import('../views/APITest/pages/card.vue')
+    },
+    {
+      path: '/style',
+      name: 'style',
+      component: () => import('../views/styleDemo/styleDemo.vue')
     }
   ]
 })

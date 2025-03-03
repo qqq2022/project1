@@ -11,6 +11,7 @@ import VXETable from 'vxe-table'
 import 'vxe-table/lib/style.css'
 
 import { i18n } from './locales/index';
+import './assets/style/index.less'
 
 
 const app = createApp(App)
