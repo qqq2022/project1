@@ -43,7 +43,22 @@ const router = createRouter({
       path: '/style',
       name: 'style',
       component: () => import('../views/styleDemo/styleDemo.vue')
-    }
+    },
+    {
+      path: '/line-split',
+      name: 'LineSplit',
+      component: () => import('../views/styleDemo/pages/LineSplit.vue')
+    },
+    {
+      path: '/margin-split',
+      name: 'MarginSplit',
+      component: () => import('../views/styleDemo/pages/MarginSplit.vue')
+    },
+    {
+      path: '/custom-card',
+      name: 'CustomCard',
+      component: () => import('../views/styleDemo/pages/CustomCard.vue')
+    },
   ]
 })
 
