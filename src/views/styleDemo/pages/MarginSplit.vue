@@ -39,7 +39,27 @@
       </a-menu>
     </div>
     <div class="margin-split-content">
-      <vxe-grid v-bind="gridOptions"> </vxe-grid>
+      <div class="content-header">
+        Title
+      </div>
+      <div class="content-main">
+        <div class="content-tabs">
+          <ul class="tab-list">
+            <li class="tab-item tab-active">tab1</li>
+            <li class="tab-item">tab2</li>
+            <li class="tab-item">tab3</li>
+            <li class="tab-item">tab4</li>
+            <li class="tab-item">tab5</li>
+          </ul>
+        </div>
+        <div class="form-area">
+          <a-select></a-select>
+          <a-select></a-select>
+        </div>
+        <div class="grid-area">
+          <vxe-grid v-bind="gridOptions"> </vxe-grid>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -161,18 +181,98 @@ const gridOptions = reactive<VxeGridProps<RowVO>>({
   display: flex;
   width: 100%;
   height: 100%;
-  background-color: yellow;
+  background-color: #efefef;
 
   &-nav {
     height: 100%;
+    margin-right: 8px;
 
     .ant-menu {
       height: 100%;
+      background-color: #fff;
+      
+      .ant-menu-item {
+        span {
+          width: 24px;
+          height: 24px;
+          color: #b7b0b0bc;
+          svg{
+            width: 24px;
+            height: 24px;
+          }
+
+        }
+        
+      }
+
+      .ant-menu-submenu{
+        span {
+          width: 24px;
+          height: 24px;
+          color: #b7b0b0bc;
+
+          svg{
+            width: 24px;
+            height: 24px;
+          }
+        }
+      }
     }
   }
 
   &-content {
     flex: 1;
+    background-color: #f8f9fc;
+
+    .content-header {
+      width: 100%;
+      height: 40px;
+      line-height: 40px;
+      background-color: #fff;
+    }
+
+    .content-tabs {
+      padding-top: 30px;
+      background-color: sky-blue;
+      .tab-list{
+        display: flex;
+        padding: 0;
+        margin: 0;
+        list-style-type: none;
+        // background-color: pink;
+
+        .tab-item{
+          height: 40px;
+          margin-right: 4px;
+          padding: 0 36px;
+          line-height: 40px;
+          background-color: #e6eefc;
+          border-top-left-radius: 4px;
+          border-top-right-radius: 4px;
+
+        }
+
+        .tab-active {
+          background-color: #fff;
+        }
+      }
+    }
+
+    .form-area {
+      width: 100%;
+      padding: 24px 0;
+      padding-left: 36px;
+      background-color: #fff;
+
+      .ant-select {
+        width: 160px;
+        margin-right: 16px;
+
+        .ant-select-selector {
+          border-radius: 0;
+        }
+      }
+    }
 
     .vxe-grid {
       height: 100%;
