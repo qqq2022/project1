@@ -1,42 +1,27 @@
 <template>
   <div class="margin-split">
     <div class="margin-split-nav">
-      <a-menu
-        v-model:openKeys="state.openKeys"
-        v-model:selectedKeys="state.selectedKeys"
-        mode="inline"
-        theme="dark"
-        :inline-collapsed="state.collapsed"
-      >
-        <a-menu-item key="1">
-          <template #icon>
-            <PieChartOutlined />
-          </template>
-          <span>Option 1</span>
-        </a-menu-item>
-        <a-menu-item key="2">
-          <template #icon>
-            <DesktopOutlined />
-          </template>
-          <span>Option 2</span>
-        </a-menu-item>
-        <a-menu-item key="3">
-          <template #icon>
-            <InboxOutlined />
-          </template>
-          <span>Option 3</span>
-        </a-menu-item>
-        <a-sub-menu key="sub1">
-          <template #icon>
-            <MailOutlined />
-          </template>
-        </a-sub-menu>
-        <a-sub-menu key="sub2">
-          <template #icon>
-            <AppstoreOutlined />
-          </template>
-        </a-sub-menu>
-      </a-menu>
+      <ul class="nav-list">
+        <li class="nav-logo">
+          <AppstoreOutlined />
+        </li>
+
+        <li class="nav-item nav-item-active">
+          <PieChartOutlined />
+        </li>
+        <li class="nav-item">
+          <DesktopOutlined />
+        </li>
+        <li class="nav-item">
+          <InboxOutlined />
+        </li>
+        <li class="nav-item">
+          <MailOutlined />
+        </li>
+        <li class="nav-item">
+          <AppstoreOutlined />
+        </li>
+      </ul>
     </div>
     <div class="margin-split-content">
       <div class="content-header">
@@ -53,8 +38,15 @@
           </ul>
         </div>
         <div class="form-area">
+          <div class="form-item">
+            <a-select></a-select>
           <a-select></a-select>
-          <a-select></a-select>
+          </div>
+
+          <div class="form-btn">
+            <a-button type="primary">查询</a-button>
+          </div>
+         
         </div>
         <div class="grid-area">
           <vxe-grid v-bind="gridOptions"> </vxe-grid>
@@ -88,14 +80,15 @@ watch(
 );
 
 const gridOptions = reactive<VxeGridProps<RowVO>>({
-  // border: true,
+  border: 'none',
+  // stripe: true,
   // height: 300,
   // align: null,
   // columnConfig: {
   //   resizable: true
   // },
   columns: [
-    { field: "name", title: "name" },
+    { type: 'checkbox', field: "name", title: "name" },
     { field: "sex", title: "sex" },
     { field: "address", title: "Address" },
   ],
@@ -181,102 +174,148 @@ const gridOptions = reactive<VxeGridProps<RowVO>>({
   display: flex;
   width: 100%;
   height: 100%;
-  background-color: #efefef;
+  background-color: #f3f3f3;
 
   &-nav {
     height: 100%;
+    width: 40px;
     margin-right: 8px;
+    background-color: #fff;
 
-    .ant-menu {
+    .nav-list {
+      width: 100%;
       height: 100%;
-      background-color: #fff;
-      
-      .ant-menu-item {
+      margin: 0;
+      padding: 0;
+      list-style-type: none;
+      text-align: center;
+
+      .nav-logo {
+        height: 40px;
+        line-height: 40px;
+        // border-bottom: 2px solid #f8f9fd;
+        color: #4381ea;
+
         span {
           width: 24px;
           height: 24px;
-          color: #b7b0b0bc;
-          svg{
-            width: 24px;
-            height: 24px;
-          }
-
+          padding: 4px 0;
+          font-size: 20px;
         }
-        
+      }
+      
+      .nav-item {
+        // background-color: pink;
+        width: 100%;
+        margin: 20px 0;
+        color: #b7b0b0bc;
+
+        span {
+          width: 24px;
+          height: 24px;
+          padding: 4px 0;
+          font-size: 20px;
+        }
+
       }
 
-      .ant-menu-submenu{
-        span {
-          width: 24px;
-          height: 24px;
-          color: #b7b0b0bc;
-
-          svg{
-            width: 24px;
-            height: 24px;
-          }
-        }
+      .nav-item-active {
+        border-left: 2px solid #4381ea
       }
     }
   }
 
   &-content {
     flex: 1;
-    background-color: #f8f9fc;
+    // background-color: #f8f9fc;
 
     .content-header {
       width: 100%;
-      height: 40px;
-      line-height: 40px;
+      height: 48px;
+      line-height: 48px;
+      margin-bottom: 8px;
       background-color: #fff;
     }
 
-    .content-tabs {
-      padding-top: 30px;
-      background-color: sky-blue;
-      .tab-list{
-        display: flex;
-        padding: 0;
-        margin: 0;
-        list-style-type: none;
-        // background-color: pink;
+    .content-main {
+      height: calc(100% - 56px);
+      background-color: #f8f9fd;
+      padding-left: 40px;
+      padding-top: 40px;
 
-        .tab-item{
-          height: 40px;
-          margin-right: 4px;
-          padding: 0 36px;
-          line-height: 40px;
-          background-color: #e6eefc;
-          border-top-left-radius: 4px;
-          border-top-right-radius: 4px;
+      .content-tabs {
+        .tab-list{
+          display: flex;
+          padding: 0;
+          margin: 0;
+          list-style-type: none;
+          // background-color: pink;
 
-        }
+          .tab-item{
+            height: 40px;
+            margin-right: 4px;
+            padding: 0 36px;
+            line-height: 40px;
+            background-color: #e7edfa;
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
 
-        .tab-active {
-          background-color: #fff;
+          }
+
+          .tab-active {
+            background-color: #fff;
+          }
         }
       }
-    }
 
     .form-area {
+      display: flex;
+      justify-content: space-between;
       width: 100%;
       padding: 24px 0;
       padding-left: 36px;
+      padding-right: 8px;
       background-color: #fff;
 
-      .ant-select {
-        width: 160px;
+      :deep(.ant-select) {
+        width: 200px;
         margin-right: 16px;
 
         .ant-select-selector {
           border-radius: 0;
         }
       }
+
+      .form-btn {
+        :deep(.ant-btn) {
+          border-radius: 0;
+          background-color: #4381ea
+        }
+      }
     }
 
-    .vxe-grid {
+    :deep(.vxe-grid) {
       height: 100%;
+
+      .vxe-table {
+        .vxe-table--header {
+          .vxe-header--row {
+            background-color: #edeef3 !important;
+          }
+        }
+
+        .vxe-body--column {
+            border-bottom: 1px solid #efefef;
+        }
+      }
+
+
+
+
     }
+    }
+
+
   }
 }
 </style>
