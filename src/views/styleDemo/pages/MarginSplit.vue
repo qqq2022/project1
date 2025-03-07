@@ -25,7 +25,11 @@
     </div>
     <div class="margin-split-content">
       <div class="content-header">
-        Title
+        <span>title</span>
+        <div class="header-right">
+          <bell-outlined />
+          <div class="user">用户信息</div>
+        </div>
       </div>
       <div class="content-main">
         <div class="content-tabs">
@@ -40,13 +44,12 @@
         <div class="form-area">
           <div class="form-item">
             <a-select></a-select>
-          <a-select></a-select>
+            <a-select></a-select>
           </div>
 
           <div class="form-btn">
             <a-button type="primary">查询</a-button>
           </div>
-         
         </div>
         <div class="grid-area">
           <vxe-grid v-bind="gridOptions"> </vxe-grid>
@@ -63,6 +66,7 @@ import {
   DesktopOutlined,
   InboxOutlined,
   AppstoreOutlined,
+  BellOutlined,
 } from "@ant-design/icons-vue";
 
 const state = reactive({
@@ -80,7 +84,7 @@ watch(
 );
 
 const gridOptions = reactive<VxeGridProps<RowVO>>({
-  border: 'none',
+  border: "none",
   // stripe: true,
   // height: 300,
   // align: null,
@@ -88,7 +92,7 @@ const gridOptions = reactive<VxeGridProps<RowVO>>({
   //   resizable: true
   // },
   columns: [
-    { type: 'checkbox', field: "name", title: "name" },
+    { type: "checkbox", field: "name", title: "name" },
     { field: "sex", title: "sex" },
     { field: "address", title: "Address" },
   ],
@@ -203,7 +207,7 @@ const gridOptions = reactive<VxeGridProps<RowVO>>({
           font-size: 20px;
         }
       }
-      
+
       .nav-item {
         // background-color: pink;
         width: 100%;
@@ -216,11 +220,10 @@ const gridOptions = reactive<VxeGridProps<RowVO>>({
           padding: 4px 0;
           font-size: 20px;
         }
-
       }
 
       .nav-item-active {
-        border-left: 2px solid #4381ea
+        border-left: 2px solid #4381ea;
       }
     }
   }
@@ -244,14 +247,14 @@ const gridOptions = reactive<VxeGridProps<RowVO>>({
       padding-top: 40px;
 
       .content-tabs {
-        .tab-list{
+        .tab-list {
           display: flex;
           padding: 0;
           margin: 0;
           list-style-type: none;
           // background-color: pink;
 
-          .tab-item{
+          .tab-item {
             height: 40px;
             margin-right: 4px;
             padding: 0 36px;
@@ -259,7 +262,6 @@ const gridOptions = reactive<VxeGridProps<RowVO>>({
             background-color: #e7edfa;
             border-top-left-radius: 4px;
             border-top-right-radius: 4px;
-
           }
 
           .tab-active {
@@ -268,54 +270,52 @@ const gridOptions = reactive<VxeGridProps<RowVO>>({
         }
       }
 
-    .form-area {
-      display: flex;
-      justify-content: space-between;
-      width: 100%;
-      padding: 24px 0;
-      padding-left: 36px;
-      padding-right: 8px;
-      background-color: #fff;
+      .form-area {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        padding: 24px 0;
+        padding-left: 36px;
+        padding-right: 8px;
+        background-color: #fff;
 
-      :deep(.ant-select) {
-        width: 200px;
-        margin-right: 16px;
+        :deep(.ant-select) {
+          width: 200px;
+          margin-right: 16px;
 
-        .ant-select-selector {
-          border-radius: 0;
-        }
-      }
-
-      .form-btn {
-        :deep(.ant-btn) {
-          border-radius: 0;
-          background-color: #4381ea
-        }
-      }
-    }
-
-    :deep(.vxe-grid) {
-      height: 100%;
-
-      .vxe-table {
-        .vxe-table--header {
-          .vxe-header--row {
-            background-color: #edeef3 !important;
+          .ant-select-selector {
+            border-radius: 0;
           }
         }
 
-        .vxe-body--column {
-            border-bottom: 1px solid #efefef;
+        .form-btn {
+          :deep(.ant-btn) {
+            border-radius: 0;
+            background-color: #4381ea;
+          }
         }
       }
 
+      .grid-area {
+        height: calc(100% - 160px);
+        :deep(.vxe-grid) {
+          height: 100%;
+          overflow: auto;
 
+          .vxe-table {
+            .vxe-table--header {
+              .vxe-header--row {
+                background-color: #edeef3 !important;
+              }
+            }
 
-
+            .vxe-body--column {
+              border-bottom: 1px solid #efefef;
+            }
+          }
+        }
+      }
     }
-    }
-
-
   }
 }
 </style>
