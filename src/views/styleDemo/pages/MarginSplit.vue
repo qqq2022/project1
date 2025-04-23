@@ -87,6 +87,10 @@ const gridOptions = reactive<VxeGridProps<RowVO>>({
   // columnConfig: {
   //   resizable: true
   // },
+  rowConfig: {
+        isCurrent: true,
+        isHover: true
+  },
   columns: [
     { type: 'checkbox', field: "name", title: "name" },
     { field: "sex", title: "sex" },
