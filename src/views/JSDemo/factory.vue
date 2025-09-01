@@ -1,37 +1,118 @@
 <template>
-  <div class="grid-stack"></div>
+  <div class="expandable-table-container">
+    <iframe
+      src="https://udify.app/chatbot/LIPmUvZZ0sxAbmsy"
+      style="width: 100%; height: 100%; min-height: 700px"
+      frameborder="0"
+      allow="microphone"
+    >
+    </iframe>
+  </div>
 </template>
-
-<script setup lang="ts">
-import 'gridstack/dist/gridstack.min.css'
-import { GridStack } from 'gridstack'
-import { onMounted, ref } from 'vue'
-import './demo.css'
-
-let count = ref(0)
-let info = ref('')
-let grid = null
-const items = [
-  { x: 2, y: 1, w: 4, h: 4, content: '<div id="chartContainer" style="height: 370px; width: 100%;"></div>' },
-  { x: 2, y: 4, w: 3 },
-  { x: 4, y: 2 },
-  { x: 3, y: 1, h: 2 },
-  { x: 0, y: 6, w: 2, h: 2 }
-]
-onMounted(() => {
-  console.log('onMounted')
-  grid = GridStack.init({
-    float: true,
-    cellHeight: '70px',
-    minRow: 1
-  })
-
-  grid.on('dragstop', function (event, element) {
-    console.log('dragstop')
-    const node = element.gridstackNode
-    // info.value = `you just dragged node #${node.id} to ${node.x},${node.y} – good job!`
-  })
-
-  grid.load(items)
-})
+<script>
+import { ref, reactive, computed, onMounted } from "vue";
 </script>
+
+<style scoped>
+.expandable-table-container {
+  padding: 20px;
+  background: #f5f7fa;
+}
+
+.column-controls {
+  background: white;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+.control-buttons {
+  margin-bottom: 20px;
+}
+
+.control-btn {
+  margin-right: 10px;
+  padding: 8px 16px;
+  border: 1px solid #dcdfe6;
+  border-radius: 4px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.control-btn:hover {
+  background: #409eff;
+  color: white;
+  border-color: #409eff;
+}
+
+.column-groups {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.column-group {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
+}
+
+.column-group h4 {
+  margin: 0 0 10px 0;
+  color: #409eff;
+}
+
+.group-controls {
+  margin-bottom: 10px;
+}
+
+.group-btn {
+  margin-right: 8px;
+  padding: 4px 8px;
+  font-size: 12px;
+  border: 1px solid #dcdfe6;
+  border-radius: 3px;
+  background: white;
+  cursor: pointer;
+}
+
+.group-btn:hover {
+  background: #409eff;
+  color: white;
+}
+
+.column-checkboxes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.checkbox-item input {
+  margin-right: 6px;
+}
+
+.expandable-grid {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+:deep(.vxe-table--render-wrapper) {
+  border-radius: 8px;
+}
+</style>
+
+<style>
+@import "vxe-table/lib/style.css";
+</style>

@@ -1,5 +1,6 @@
 <template>
-  <Flex vertical gap="small">
+  1111111
+  <!-- <Flex vertical gap="small">
     <Flex gap="large" align="center">
       Use roles as:
       <Switch
@@ -29,7 +30,7 @@
       :roles="useRolesAsFunction ? rolesAsFunction : rolesAsObject"
       :items="charts"
     />
-  </Flex>
+  </Flex> -->
 </template>
 <script setup lang="ts">
 import { UserOutlined } from "@ant-design/icons-vue";
@@ -92,17 +93,73 @@ const handleChange = (checked: SwitchProps["checked"]) => {
 };
 
 const charts = ref([
-  { key: 1, role: "ai", content: "12345" },
-  { key: 2, role: "user", content: "999999999" },
-  // {
-  //   key: "ai",
-  //   role: "ai",
-  //   loading: true,
-  // },
+  {
+    key: 1,
+    role: "ai",
+    content:
+      "测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容",
+  },
+  {
+    key: 2,
+    role: "user",
+    content:
+      "测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容",
+  },
+  {
+    key: 3,
+    role: "ai",
+    content:
+      "测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容测试很多文字的情况这里是返回的内容",
+  },
 ]);
 
 const addContent = () => {
   console.log("新增内容");
-  charts.value.push({ key: 3, role: "user", content: "allalallalalaaaa", typing: true, });
+  charts.value.push({
+    key: 3,
+    role: "user",
+    content: "allalallalalaaaa",
+    typing: true,
+  });
 };
 </script>
+<style lang="less" scoped>
+.loading-dots {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  margin: 0 4px;
+  border-radius: 50%;
+  background-color: #1890ff; /* Ant Design 主色 */
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+.dot1 {
+  animation-delay: 0s;
+}
+
+.dot2 {
+  animation-delay: 0.5s;
+}
+
+.dot3 {
+  animation-delay: 1s;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+</style>
