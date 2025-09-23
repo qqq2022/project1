@@ -1,147 +1,277 @@
 <template>
-  <div class="container">
-    <div 
-      v-for="(item, index) in items" 
-      :key="index"
-      class="number-box"
-      :class="{
-        'increase-highlight': item.highlight === 'increase',
-        'decrease-highlight': item.highlight === 'decrease'
-      }"
-      :style="{
-        '--restore-bg': item.bgColor || '#ffffff',
-        '--restore-text': item.textColor || '#000000',
-        '--restore-border': item.borderColor || '#cccccc'
-      }"
-      @animationend="resetHighlight(index)"
-    >
-      {{ item.value }}
+  <div class="colored-header-table">
+    <!-- 列控制面板 -->
+    <div class="control-panel">
+      <h3>表格列控制</h3>
+      <div class="control-buttons">
+        <button @click="toggleAllReports" class="control-btn">
+          {{ showAllReports ? "隐藏" : "显示" }}所有报告列
+        </button>
+        <button
+          @click="highlightReports = !highlightReports"
+          class="control-btn"
+        >
+          {{ highlightReports ? "取消" : "" }}高亮报告列
+        </button>
+      </div>
     </div>
+
+    <!-- 表格 -->
+    <vxe-grid ref="gridRef" v-bind="gridOptions" class="custom-table">
+      <template #toolbar_buttons>
+        <a-button @click="exportData">导出数据</a-button>
+      </template>
+    </vxe-grid>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue';
+<script setup>
+import { ref, reactive, computed, onMounted, watch } from "vue";
 
-interface NumberItem {
-  value: number;
-  highlight: 'increase' | 'decrease' | null;
-  bgColor?: string;
-  textColor?: string;
-  borderColor?: string;
-}
+const gridRef = ref();
+const highlightReports = ref(true);
+const showAllReports = ref(true);
 
-export default defineComponent({
-  name: 'HighlightNumbers',
-  setup() {
-    // 初始数据
-    const items = ref<NumberItem[]>([
-      { 
-        value: 10, 
-        highlight: null,
-        bgColor: '#f5f5f5',  // 自定义恢复背景色
-        textColor: '#333',   // 自定义恢复文字色
-        borderColor: '#ddd'  // 自定义恢复边框色
-      },
-      { 
-        value: 20, 
-        highlight: null,
-        bgColor: '#f0f8ff',  // 另一个自定义背景色
-        textColor: '#222',
-        borderColor: '#eee'
-      }
-    ]);
+// 生成示例列 - 包含普通列和报告列
+const generateColumns = () => {
+  const columns = [];
 
-    // 模拟API调用
-    const fetchNewData = async () => {
-      // 这里应该是实际的API调用
-      // 模拟返回新数据
-      const newValues = [
-        { value: 15, bgColor: '#f5f5f5', textColor: '#333', borderColor: '#ddd' }, // 第一个数字增加
-        { value: 18, bgColor: '#f0f8ff', textColor: '#222', borderColor: '#eee' }  // 第二个数字减少
-      ];
-      
-      // 更新数据并设置高亮状态
-      items.value = items.value.map((item, index) => {
-        const newItem = newValues[index];
-        let highlight: 'increase' | 'decrease' | null = null;
-        
-        if (newItem.value > item.value) {
-          highlight = 'increase';
-        } else if (newItem.value < item.value) {
-          highlight = 'decrease';
-        }
-        
-        return {
-          ...newItem,
-          highlight
-        };
-      });
-    };
-
-    // 重置高亮状态
-    const resetHighlight = (index: number) => {
-      items.value[index].highlight = null;
-    };
-
-    // 定时获取新数据（模拟）
-    setInterval(fetchNewData, 3000);
-
-    return {
-      items,
-      resetHighlight
-    };
+  // 普通信息列
+  for (let i = 1; i <= 10; i++) {
+    columns.push({
+      field: `info_${i}`,
+      title: `信息列 ${i}`,
+      width: 120,
+    });
   }
+
+  // 报告列（以 report_ 开头）
+  for (let i = 1; i <= 8; i++) {
+    columns.push({
+      field: `report_${i}`,
+      title: `报告列 ${i}`,
+      width: 140,
+      isReport: true,
+    });
+  }
+
+  // 更多普通列
+  for (let i = 11; i <= 20; i++) {
+    columns.push({
+      field: `info_${i}`,
+      title: `信息列 ${i}`,
+      width: 120,
+    });
+  }
+
+  return columns;
+};
+
+// 生成示例数据
+const generateData = () => {
+  const data = [];
+  for (let i = 1; i <= 30; i++) {
+    const item = { id: i };
+    const allColumns = generateColumns();
+    allColumns.forEach((column) => {
+      if (column.field.startsWith("report_")) {
+        item[column.field] = `报告值${i}-${Math.random().toFixed(2)}`;
+      } else {
+        item[column.field] = `值${i}`;
+      }
+    });
+    data.push(item);
+  }
+  return data;
+};
+
+const allColumns = ref(generateColumns());
+const tableData = ref(generateData());
+
+// 过滤显示的列
+const visibleColumns = computed(() => {
+  return allColumns.value.filter((column) => {
+    if (column.field.startsWith("report_")) {
+      return showAllReports.value;
+    }
+    return true;
+  });
+});
+
+// 更新表格列配置
+const updateGridColumns = () => {
+  gridOptions.columns = [
+    { type: "seq", width: 60, fixed: "left" },
+    ...visibleColumns.value.map((col) => ({
+      field: col.field,
+      title: col.title,
+      width: col.width,
+      showOverflow: true,
+      // 为报告列添加自定义标题样式
+      headerClassName:
+        col.field.startsWith("report_") && highlightReports.value
+          ? "report-header"
+          : "",
+    })),
+    {
+      type: "operate",
+      width: 100,
+      fixed: "right",
+      title: "操作",
+      headerClassName: "operation-header",
+    },
+  ];
+};
+
+// 表格配置
+const gridOptions = reactive({
+  border: true,
+  resizable: true,
+  showOverflow: true,
+  height: 500,
+  toolbar: {
+    slots: {
+      buttons: "toolbar_buttons",
+    },
+  },
+  columns: [],
+});
+
+// 切换所有报告列的显示状态
+const toggleAllReports = () => {
+  showAllReports.value = !showAllReports.value;
+  updateGridColumns();
+};
+
+// 导出数据
+const exportData = () => {
+  const $grid = gridRef.value;
+  $grid.exportData({
+    filename: "表格数据",
+    sheetName: "Sheet1",
+    type: "xlsx",
+  });
+};
+
+// 监听高亮状态变化
+watch(highlightReports, updateGridColumns);
+watch(showAllReports, updateGridColumns);
+
+// 初始化
+onMounted(() => {
+  updateGridColumns();
 });
 </script>
 
 <style scoped>
-.container {
-  display: flex;
-  gap: 20px;
+.colored-header-table {
+  padding: 20px;
+  background: #f5f7fa;
+  min-height: 100vh;
 }
 
-.number-box {
-  width: 100px;
-  height: 100px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 24px;
-  font-weight: bold;
-  color: var(--restore-text, black);
-  background-color: var(--restore-bg, white);
-  border: 2px solid var(--restore-border, #ccc);
+.control-panel {
+  background: white;
+  padding: 20px;
+  margin-bottom: 20px;
   border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+.control-panel h3 {
+  margin: 0 0 15px 0;
+  color: #333;
+  font-size: 18px;
+}
+
+.control-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.control-btn {
+  padding: 10px 20px;
+  border: 1px solid #409eff;
+  border-radius: 6px;
+  background: white;
+  color: #409eff;
+  cursor: pointer;
+  font-size: 14px;
   transition: all 0.3s ease;
 }
 
-.increase-highlight {
-  --highlight-bg: rgba(144, 238, 144, 1);
-  --highlight-text: darkgreen;
-  --highlight-border: darkgreen;
-  
-  animation: fade 2s forwards;
+.control-btn:hover {
+  background: #409eff;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(64, 158, 255, 0.3);
 }
 
-.decrease-highlight {
-  --highlight-bg: rgba(255, 182, 193, 1);
-  --highlight-text: darkred;
-  --highlight-border: darkred;
-  
-  animation: fade 2s forwards;
+.custom-table {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
 }
 
-@keyframes fade {
-  0% {
-    color: var(--highlight-text);
-    background-color: var(--highlight-bg);
-    border-color: var(--highlight-border);
+:deep(.vxe-table--render-wrapper) {
+  border-radius: 8px;
+}
+</style>
+
+<style>
+/* 全局样式 */
+@import "vxe-table/lib/style.css";
+
+/* 报告列标题样式 */
+:deep(.report-header) {
+  background: linear-gradient(135deg, #ff6b6b, #ee5a24) !important;
+  color: white !important;
+  font-weight: bold !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+:deep(.report-header .vxe-cell--title) {
+  color: white !important;
+}
+
+:deep(.report-header:hover) {
+  background: linear-gradient(135deg, #ff5252, #d63031) !important;
+}
+
+/* 操作列标题样式 */
+:deep(.operation-header) {
+  background: linear-gradient(135deg, #74b9ff, #0984e3) !important;
+  color: white !important;
+  font-weight: bold !important;
+}
+
+/* 表格整体样式调整 */
+:deep(.vxe-header--column) {
+  transition: background-color 0.3s ease;
+}
+
+:deep(.vxe-table--header) {
+  border-radius: 8px 8px 0 0;
+  overflow: hidden;
+}
+
+:deep(.vxe-table--body) {
+  border-radius: 0 0 8px 8px;
+}
+
+/* 鼠标悬停效果 */
+:deep(.vxe-header--column:not(.report-header):not(.operation-header):hover) {
+  background: #f0f7ff !important;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .control-buttons {
+    flex-direction: column;
   }
-  100% {
-    color: var(--restore-text, black);
-    background-color: var(--restore-bg, white);
-    border-color: var(--restore-border, #ccc);
+
+  .control-btn {
+    width: 100%;
   }
 }
 </style>

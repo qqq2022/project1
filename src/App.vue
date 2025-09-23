@@ -13,4 +13,11 @@ onMounted(() => {
 });
 </script>
 
-<style scoped></style>
+<!-- <style lang="scss">
+// @use "@/styles/index";
+@use "highlight.js/styles/lightfair.css" as *;
+</style> -->
+
+<style lang="less">
+@import url("highlight.js/styles/lightfair.css");
+</style>

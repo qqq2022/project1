@@ -1,0 +1,100 @@
+.markdown-code-wrapper {
+  background-color: pink;
+  position: relative;
+  white-space: initial;
+  background-color: #f6f6f7;
+  line-height: 24px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 12px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  overflow: hidden;
+
+  .markdown-code-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #3c3c43;
+    opacity: 0.1;
+  }
+
+  .markdown-code-copy {
+    padding-left: 14px;
+    padding-right: 14px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background-color: transparent;
+    color: #808080;
+    cursor: pointer;
+    transition: all 300ms;
+    opacity: 100;
+    z-index: 1;
+
+    .markdown-copy-icon {
+      font-size: 16px;
+      pointer-events: none;
+      margin-right: 4px;
+      font-family: 'ci:copy'; /* Assuming 'ci:copy' is a custom icon font */
+    }
+
+    .markdown-copy-text {
+      pointer-events: none;
+
+      &.default {
+        display: initial;
+      }
+
+      &.done {
+        display: none;
+      }
+    }
+
+    &.copied {
+      .markdown-copy-icon {
+        font-family: 'ic:baseline-check'; /* Assuming 'ic:baseline-check' is a custom icon font */
+      }
+
+      .markdown-copy-text {
+        &.default {
+          display: none;
+        }
+
+        &.done {
+          display: initial;
+        }
+      }
+    }
+  }
+
+  .markdown-code-lang {
+    padding-left: 14px;
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(60, 60, 67, 0.56);
+    transition: all 300ms;
+    opacity: 100;
+    z-index: 0;
+  }
+
+  pre,
+  li {
+    code {
+      background-color: #f6f6f7;
+      white-space: pre;
+      padding-top: 15px;
+      padding-bottom: 15px;
+    }
+  }
+
+  // pre code.hljs {
+  //   display: block;
+  //   overflow-x: auto;
+  //   padding: 1em;
+  // }
+}

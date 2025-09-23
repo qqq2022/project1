@@ -1,0 +1,13 @@
+@import "highlight.js/styles/lightfair.css";
+/* stylelint-disable rule-empty-line-before */
+/* theme color */
+#nprogress .bar {
+  background: #692ee6 !important;
+}
+#nprogress .peg {
+  box-shadow: 0 0 10px #692ee6, 0 0 5px #692ee6 !important;
+}
+#nprogress .spinner-icon {
+  border-top-color: #692ee6;
+  border-left-color: #692ee6;
+}
