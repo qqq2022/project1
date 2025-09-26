@@ -78,4 +78,8 @@ const startRender = async () => {
 };
 </script>
 
-<style lang="less"></style>
+<style lang="less" scoped>
+.line-split {
+  font-size: 16px;
+}
+</style>

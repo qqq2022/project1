@@ -12,7 +12,6 @@ import 'vxe-table/lib/style.css'
 
 import { i18n } from './locales/index';
 import './assets/style/index.less'
-import 'virtual:uno.css'
 
 
 const app = createApp(App)

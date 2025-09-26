@@ -57,4 +57,12 @@ const hljsDefineMermaid = () => {
 }
 hljs.registerLanguage('mermaid', hljsDefineMermaid)
 
+const hljsDefinedEcharts = () => {
+  return {
+    name: 'echarts',
+    contains: []
+  }
+}
+hljs.registerLanguage('echarts', hljsDefinedEcharts)
+
 export default hljs

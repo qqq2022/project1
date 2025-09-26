@@ -6,13 +6,15 @@ import * as TransformUtils from '@/views/markdownRender/transform'
 import { defaultModelName, modelMappingList } from '@/views/markdownRender/models'
 
 export interface BusinessState {
-  systemModelName: string
+  systemModelName: string,
+  echartMap: Map<string, any>
 }
 
 export const useBusinessStore = defineStore('business-store', {
   state: (): BusinessState => {
     return {
-      systemModelName: defaultModelName
+      systemModelName: defaultModelName,
+      echartMap: new Map(),
     }
   },
   getters: {

@@ -1,166 +1,47 @@
 <template>
   <div class="colored-header-table">
-    <!-- 列控制面板 -->
-    <div class="control-panel">
-      <h3>表格列控制</h3>
-      <div class="control-buttons">
-        <button @click="toggleAllReports" class="control-btn">
-          {{ showAllReports ? "隐藏" : "显示" }}所有报告列
-        </button>
-        <button
-          @click="highlightReports = !highlightReports"
-          class="control-btn"
-        >
-          {{ highlightReports ? "取消" : "" }}高亮报告列
-        </button>
-      </div>
-    </div>
-
-    <!-- 表格 -->
-    <vxe-grid ref="gridRef" v-bind="gridOptions" class="custom-table">
-      <template #toolbar_buttons>
-        <a-button @click="exportData">导出数据</a-button>
-      </template>
-    </vxe-grid>
+    <div class="markdown-body" v-html="renderedAnswer" />
   </div>
 </template>
 
 <script setup>
 import { ref, reactive, computed, onMounted, watch } from "vue";
+import MarkdownIt from "markdown-it";
+import markdownItContainer from "markdown-it-container";
 
-const gridRef = ref();
-const highlightReports = ref(true);
-const showAllReports = ref(true);
-
-// 生成示例列 - 包含普通列和报告列
-const generateColumns = () => {
-  const columns = [];
-
-  // 普通信息列
-  for (let i = 1; i <= 10; i++) {
-    columns.push({
-      field: `info_${i}`,
-      title: `信息列 ${i}`,
-      width: 120,
-    });
-  }
-
-  // 报告列（以 report_ 开头）
-  for (let i = 1; i <= 8; i++) {
-    columns.push({
-      field: `report_${i}`,
-      title: `报告列 ${i}`,
-      width: 140,
-      isReport: true,
-    });
-  }
-
-  // 更多普通列
-  for (let i = 11; i <= 20; i++) {
-    columns.push({
-      field: `info_${i}`,
-      title: `信息列 ${i}`,
-      width: 120,
-    });
-  }
-
-  return columns;
-};
-
-// 生成示例数据
-const generateData = () => {
-  const data = [];
-  for (let i = 1; i <= 30; i++) {
-    const item = { id: i };
-    const allColumns = generateColumns();
-    allColumns.forEach((column) => {
-      if (column.field.startsWith("report_")) {
-        item[column.field] = `报告值${i}-${Math.random().toFixed(2)}`;
-      } else {
-        item[column.field] = `值${i}`;
-      }
-    });
-    data.push(item);
-  }
-  return data;
-};
-
-const allColumns = ref(generateColumns());
-const tableData = ref(generateData());
-
-// 过滤显示的列
-const visibleColumns = computed(() => {
-  return allColumns.value.filter((column) => {
-    if (column.field.startsWith("report_")) {
-      return showAllReports.value;
-    }
-    return true;
-  });
+const renderedAnswer = ref();
+const md = new MarkdownIt({
+  html: true,
+  linkify: true,
+  typographer: true,
 });
 
-// 更新表格列配置
-const updateGridColumns = () => {
-  gridOptions.columns = [
-    { type: "seq", width: 60, fixed: "left" },
-    ...visibleColumns.value.map((col) => ({
-      field: col.field,
-      title: col.title,
-      width: col.width,
-      showOverflow: true,
-      // 为报告列添加自定义标题样式
-      headerClassName:
-        col.field.startsWith("report_") && highlightReports.value
-          ? "report-header"
-          : "",
-    })),
-    {
-      type: "operate",
-      width: 100,
-      fixed: "right",
-      title: "操作",
-      headerClassName: "operation-header",
-    },
-  ];
-};
-
-// 表格配置
-const gridOptions = reactive({
-  border: true,
-  resizable: true,
-  showOverflow: true,
-  height: 500,
-  toolbar: {
-    slots: {
-      buttons: "toolbar_buttons",
-    },
+md.use(markdownItContainer, "echarts", {
+  validate: function (params) {
+    return params.trim().match(/^echarts\s+(.*)$/);
   },
-  columns: [],
+  render: function (tokens, idx) {
+    console.log("进入render里面", tokens);
+    console.log("idx", idx);
+    var m = tokens[idx].info.trim().match(/^echarts\s+(.*)$/);
+    console.log("m", m);
+    if (m && m[1]) {
+      console.log(JSON.parse(m[1]));
+    }
+    if (tokens[idx].nesting === 1) {
+      // 开启标签
+      return "<details><summary>" + md.utils.escapeHtml(m[1]) + "</summary>\n";
+    } else {
+      // 结束标签
+      return "</details>\n";
+    }
+  },
 });
 
-// 切换所有报告列的显示状态
-const toggleAllReports = () => {
-  showAllReports.value = !showAllReports.value;
-  updateGridColumns();
-};
-
-// 导出数据
-const exportData = () => {
-  const $grid = gridRef.value;
-  $grid.exportData({
-    filename: "表格数据",
-    sheetName: "Sheet1",
-    type: "xlsx",
-  });
-};
-
-// 监听高亮状态变化
-watch(highlightReports, updateGridColumns);
-watch(showAllReports, updateGridColumns);
-
-// 初始化
-onMounted(() => {
-  updateGridColumns();
-});
+renderedAnswer.value = md.render(
+  `::: echarts {"id":"3e1cb1c4-bc4c-4340-825a-5bd7eabc2a94","option":{"title":{"text":"ECharts 入门示例"},"tooltip":{},"xAxis":{"data":["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]},"yAxis":{},"series":[{"name":"销量","type":"bar","data":[5,20,36,10,10,20]}]}}\n:::\n`
+);
+console.log();
 </script>
 
 <style scoped>

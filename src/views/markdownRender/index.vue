@@ -123,11 +123,12 @@ export default {
 
 <script lang="ts" setup>
 import { ref, computed, nextTick, watch, onUnmounted } from "vue";
-import { renderMarkdownText, renderMermaidProcess } from "./plugins/markdown";
+import { renderMarkdownText, renderMermaidProcess, drawEcharts } from "./plugins/markdown";
 
 import type { CrossTransformFunction, TransformFunction } from "./models";
 import { defaultMockModelName } from "./models";
 import { message } from "ant-design-vue";
+import * as echarts from "echarts";
 
 interface Props {
   reader?: ReadableStreamDefaultReader<Uint8Array> | null | undefined;
@@ -354,6 +355,9 @@ const showText = () => {
         isCompleted.value = true;
         nextTick(() => {
           readIsOver.value = false;
+          //渲染echarts图表
+          drawEcharts(echarts)
+
         });
         typingAnimationFrame = null;
       }

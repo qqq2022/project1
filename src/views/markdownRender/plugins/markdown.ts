@@ -8,6 +8,7 @@ import splitAtDelimiters from 'katex/contrib/auto-render/splitAtDelimiters'
 
 import 'katex/dist/katex.min.css'
 import 'katex/dist/contrib/mhchem.min.js'
+import markdownItContainer from 'markdown-it-container';
 
 import {
   markdownItMermaidPlugin,
@@ -16,11 +17,16 @@ import {
 } from '@nzoth/toolkit'
 
 import '@nzoth/toolkit/styles'
+import { echartsPlugins } from './echarts'
+import { useBusinessStore } from "@/stores/useBusinessStore";
+import { nextTick } from 'vue';
+
+const businessStore = useBusinessStore();
 
 const md = new MarkdownIt({
   html: true,
   linkify: true,
-  typographer: true
+  typographer: true,
 })
 
 md.use(markdownItHighlight, {
@@ -31,6 +37,9 @@ md.use(markdownItHighlight, {
   })
   .use(markdownItKatex)
   .use(markdownItMermaidPlugin)
+  .use(markdownItContainer, 'echarts', {
+    render: echartsPlugins
+  });
 
 
 const transformMathMarkdown = (markdownText: string) => {
@@ -51,7 +60,7 @@ const transformMathMarkdown = (markdownText: string) => {
     if (segment.type === 'text') {
       return result + segment.data
     }
-    const math = segment.display ? `$$${ segment.data }$$` : `$${ segment.data }$`
+    const math = segment.display ? `$$${segment.data}$$` : `$${segment.data}$`
     return result + math
   }, '')
 }
@@ -82,7 +91,7 @@ const transformThinkMarkdown = (source: string): string => {
 
     if (!inThinkBlock && nextChars === '<think>') {
       inThinkBlock = true
-      result += `<div class="${ classNameWrapper }">`
+      result += `<div class="${classNameWrapper}">`
       i += 6
       continue
     }
@@ -105,7 +114,7 @@ const transformThinkMarkdown = (source: string): string => {
     const escapedBuffer = escapeScriptTags(buffer)
     const thinkContent = md.render(escapedBuffer)
 
-    result = result.replace(`<div class="${ classNameWrapper }">`, `<div class="${ classNameWrapper }">${ thinkContent }`)
+    result = result.replace(`<div class="${classNameWrapper}">`, `<div class="${classNameWrapper}">${thinkContent}`)
   }
 
   return result
@@ -119,7 +128,20 @@ export const renderMarkdownText = (content: string) => {
   return md.render(mermaidTransformed)
 }
 
+export const drawEcharts = async (echarts) => {
+  console.log('倒计时结束');
+  await nextTick();
+  console.log('businessStore.echartMap', businessStore.echartMap)
+  businessStore.echartMap.forEach((value, key) => {
+    const dom = document.getElementById(`echarts-id-${key}`)
+    console.log('dom', dom);
+    debugger;
+    let myChart = echarts.init(dom);
+    myChart.setOption(value);
+  })
+}
+
 // 触发 Mermaid 渲染
-export const renderMermaidProcess = (callback = () => {}) => {
+export const renderMermaidProcess = (callback = () => { }) => {
   renderMermaidSSE(callback)
 }

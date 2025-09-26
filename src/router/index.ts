@@ -80,18 +80,6 @@ router.beforeEach((to, from, next) => {
     // 继续正常导航
     next()
   }
-
-  // next()
-  // next('/login')
-  
-  // 如果目标路由需要认证且用户未登录
-  // if (!isAuthenticated) {
-  //   // 重定向到登录页面
-  //   next('/login')
-  // } else {
-  //   // 继续正常导航
-  //   next()
-  // }
 })
 
 export default router

@@ -24,6 +24,7 @@
 
 <script lang="ts" setup>
 import { useClipText } from "../hooks/useClipText";
+import { message } from "ant-design-vue";
 
 const { copy, copied, copyDuration } = useClipText();
 
@@ -42,10 +43,12 @@ const copyText = async () => {
   if (copied.value) return;
 
   await copy(props.text);
-  window.$ModalMessage.destroyAll();
-  window.$ModalMessage.success("已复制", {
-    duration: copyDuration,
-  });
+  // window.$ModalMessage.destroyAll();
+
+  // window.$ModalMessage.success("已复制", {
+  //   duration: copyDuration,
+  // });
+  message.success("已复制");
 };
 
 defineExpose({

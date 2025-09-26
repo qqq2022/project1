@@ -16,7 +16,7 @@
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid #3c3c43;
-  opacity: 0.1;
+  border-bottom-color: rgba(60, 60, 67, 0.1);
 }
 .markdown-code-wrapper .markdown-code-copy {
   padding-left: 14px;
